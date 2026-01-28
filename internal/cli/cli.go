@@ -16,6 +16,7 @@ import (
 	"github.com/dlorenc/multiclaude/internal/agents"
 	"github.com/dlorenc/multiclaude/internal/bugreport"
 	"github.com/dlorenc/multiclaude/internal/daemon"
+	"github.com/dlorenc/multiclaude/internal/dashboard"
 	"github.com/dlorenc/multiclaude/internal/errors"
 	"github.com/dlorenc/multiclaude/internal/fork"
 	"github.com/dlorenc/multiclaude/internal/format"
@@ -368,6 +369,14 @@ func (c *CLI) registerCommands() {
 		Description: "Stop daemon and kill all multiclaude tmux sessions",
 		Usage:       "multiclaude stop-all [--clean] [--yes]",
 		Run:         c.stopAll,
+	}
+
+	// Dashboard command
+	c.rootCmd.Subcommands["dashboard"] = &Command{
+		Name:        "dashboard",
+		Description: "Start web dashboard for monitoring multiclaude",
+		Usage:       "multiclaude dashboard [--port <port>] [--open]",
+		Run:         c.dashboard,
 	}
 
 	// Repository commands (repo subcommand)
@@ -827,6 +836,36 @@ func (c *CLI) daemonLogs(args []string) error {
 	return cmd.Run()
 }
 
+func (c *CLI) dashboard(args []string) error {
+	flags, _ := ParseFlags(args)
+
+	// Default port 8080, configurable
+	port := "8080"
+	if p, ok := flags["port"]; ok {
+		port = p
+	}
+	if p, ok := flags["p"]; ok {
+		port = p
+	}
+
+	// Optional: open browser automatically
+	openBrowser := flags["open"] == "true"
+
+	// Create and start dashboard server
+	srv := dashboard.New(c.paths)
+
+	addr := fmt.Sprintf(":%s", port)
+	fmt.Printf("Dashboard available at http://localhost%s\n", addr)
+	fmt.Println("Press Ctrl+C to stop")
+
+	if openBrowser {
+		exec.Command("open", fmt.Sprintf("http://localhost%s", addr)).Start()
+	}
+
+	// Block until interrupted
+	return srv.ListenAndServe(addr)
+}
+
 func (c *CLI) stopAll(args []string) error {
 	flags, _ := ParseFlags(args)
 	clean := flags["clean"] == "true"
@@ -1036,14 +1075,11 @@ func (c *CLI) initRepo(args []string) error {
 	if len(posArgs) >= 2 {
 		repoName = posArgs[1]
 	} else {
-		// Extract repo name from URL (e.g., github.com/user/repo -> repo)
-		// A valid GitHub URL has format: https://github.com/owner/repo
-		// When split by "/": ["https:", "", "github.com", "owner", "repo"] - 5+ parts
-		parts := strings.Split(githubURL, "/")
-		if len(parts) < 5 {
+		// Extract repo name from URL - supports HTTPS, SSH, HTTP, and git:// formats
+		repoName = extractRepoNameFromURL(githubURL)
+		if repoName == "" {
 			return errors.InvalidUsage("could not determine repository name from URL; please provide a name: multiclaude init <url> <name>")
 		}
-		repoName = strings.TrimSuffix(parts[len(parts)-1], ".git")
 	}
 
 	// Validate repository name before any operations
@@ -3530,7 +3566,46 @@ func (c *CLI) inferRepoFromCwd() (string, error) {
 	return "", fmt.Errorf("not in a multiclaude directory")
 }
 
-// normalizeGitHubURL normalizes GitHub URLs to a common format for comparison.
+// extractRepoNameFromURL extracts the repository name from various GitHub URL formats.
+// Supports SSH (git@github.com:user/repo.git), HTTPS (https://github.com/user/repo),
+// HTTP (http://github.com/user/repo), and git:// (git://github.com/user/repo) formats.
+// Returns empty string if the URL format is not recognized.
+func extractRepoNameFromURL(url string) string {
+	url = strings.TrimSpace(url)
+	url = strings.TrimRight(url, "/")
+	lowerURL := strings.ToLower(url)
+
+	var path string
+
+	// Handle SSH format: git@github.com:user/repo.git
+	if strings.HasPrefix(lowerURL, "git@github.com:") {
+		path = url[len("git@github.com:"):]
+	} else if strings.HasPrefix(lowerURL, "https://github.com/") {
+		// Handle HTTPS format: https://github.com/user/repo.git
+		path = url[len("https://github.com/"):]
+	} else if strings.HasPrefix(lowerURL, "http://github.com/") {
+		// Handle HTTP format: http://github.com/user/repo.git
+		path = url[len("http://github.com/"):]
+	} else if strings.HasPrefix(lowerURL, "git://github.com/") {
+		// Handle git:// protocol: git://github.com/user/repo.git
+		path = url[len("git://github.com/"):]
+	} else {
+		return ""
+	}
+
+	// Remove .git suffix
+	path = strings.TrimSuffix(path, ".git")
+
+	// Extract repo name (last path component)
+	// e.g., "user/repo" -> "repo" or "org/nested/repo" -> "repo"
+	parts := strings.Split(path, "/")
+	if len(parts) == 0 {
+		return ""
+	}
+	return parts[len(parts)-1]
+}
+
+// normalizeGitHubURL normalizes a GitHub URL for comparison purposes.
 // It handles both SSH (git@github.com:user/repo.git) and HTTPS (https://github.com/user/repo) formats.
 // Returns lowercase "github.com/user/repo" format for comparison.
 func normalizeGitHubURL(url string) string {

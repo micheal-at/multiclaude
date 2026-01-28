@@ -2204,6 +2204,89 @@ func TestSanitizeTmuxSessionName(t *testing.T) {
 	}
 }
 
+func TestExtractRepoNameFromURL(t *testing.T) {
+	tests := []struct {
+		name string
+		url  string
+		want string
+	}{
+		{
+			name: "SSH format with .git",
+			url:  "git@github.com:user/repo.git",
+			want: "repo",
+		},
+		{
+			name: "SSH format without .git",
+			url:  "git@github.com:user/repo",
+			want: "repo",
+		},
+		{
+			name: "HTTPS format",
+			url:  "https://github.com/user/repo",
+			want: "repo",
+		},
+		{
+			name: "HTTPS format with .git",
+			url:  "https://github.com/user/repo.git",
+			want: "repo",
+		},
+		{
+			name: "HTTPS format with trailing slash",
+			url:  "https://github.com/user/repo/",
+			want: "repo",
+		},
+		{
+			name: "HTTP format",
+			url:  "http://github.com/user/repo",
+			want: "repo",
+		},
+		{
+			name: "git:// protocol",
+			url:  "git://github.com/user/repo.git",
+			want: "repo",
+		},
+		{
+			name: "whitespace trimmed",
+			url:  "  https://github.com/user/repo  ",
+			want: "repo",
+		},
+		{
+			name: "non-GitHub URL",
+			url:  "https://gitlab.com/user/repo",
+			want: "",
+		},
+		{
+			name: "empty string",
+			url:  "",
+			want: "",
+		},
+		{
+			name: "organization repo SSH",
+			url:  "git@github.com:Hyperbase/airbricks.git",
+			want: "airbricks",
+		},
+		{
+			name: "nested path SSH",
+			url:  "git@github.com:user/nested/path.git",
+			want: "path",
+		},
+		{
+			name: "nested path HTTPS",
+			url:  "https://github.com/user/nested/path",
+			want: "path",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := extractRepoNameFromURL(tt.url)
+			if got != tt.want {
+				t.Errorf("extractRepoNameFromURL(%q) = %q, want %q", tt.url, got, tt.want)
+			}
+		})
+	}
+}
+
 func TestNormalizeGitHubURL(t *testing.T) {
 	tests := []struct {
 		name string
