@@ -9,7 +9,7 @@
 //
 // # Installation
 //
-//	go get github.com/dlorenc/multiclaude/pkg/tmux
+//	go get github.com/micheal-at/multiclaude/pkg/tmux
 //
 // # Requirements
 //
@@ -23,7 +23,7 @@
 //	import (
 //	    "context"
 //	    "log"
-//	    "github.com/dlorenc/multiclaude/pkg/tmux"
+//	    "github.com/micheal-at/multiclaude/pkg/tmux"
 //	)
 //
 //	func main() {

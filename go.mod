@@ -1,4 +1,4 @@
-module github.com/dlorenc/multiclaude
+module github.com/micheal-at/multiclaude
 
 go 1.25.1
 

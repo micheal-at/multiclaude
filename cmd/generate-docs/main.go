@@ -13,7 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dlorenc/multiclaude/pkg/config"
+	"github.com/micheal-at/multiclaude/pkg/config"
 )
 
 func main() {

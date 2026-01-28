@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/dlorenc/multiclaude/internal/prompts/commands"
-	"github.com/dlorenc/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/internal/prompts/commands"
+	"github.com/micheal-at/multiclaude/internal/state"
 )
 
 // AgentType is an alias for state.AgentType.

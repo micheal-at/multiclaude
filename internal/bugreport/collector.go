@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dlorenc/multiclaude/internal/redact"
-	"github.com/dlorenc/multiclaude/internal/state"
-	"github.com/dlorenc/multiclaude/pkg/config"
+	"github.com/micheal-at/multiclaude/internal/redact"
+	"github.com/micheal-at/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/pkg/config"
 )
 
 // Report contains all collected diagnostic information

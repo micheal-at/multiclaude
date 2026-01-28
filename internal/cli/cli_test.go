@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dlorenc/multiclaude/internal/daemon"
-	"github.com/dlorenc/multiclaude/internal/messages"
-	"github.com/dlorenc/multiclaude/internal/socket"
-	"github.com/dlorenc/multiclaude/internal/state"
-	"github.com/dlorenc/multiclaude/pkg/config"
-	"github.com/dlorenc/multiclaude/pkg/tmux"
+	"github.com/micheal-at/multiclaude/internal/daemon"
+	"github.com/micheal-at/multiclaude/internal/messages"
+	"github.com/micheal-at/multiclaude/internal/socket"
+	"github.com/micheal-at/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/pkg/config"
+	"github.com/micheal-at/multiclaude/pkg/tmux"
 )
 
 func TestParseFlags(t *testing.T) {

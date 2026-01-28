@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dlorenc/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/internal/state"
 )
 
 func TestGetDefaultPrompt(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dlorenc/multiclaude/internal/state"
-	"github.com/dlorenc/multiclaude/pkg/config"
+	"github.com/micheal-at/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/pkg/config"
 )
 
 func TestCollector_Collect(t *testing.T) {

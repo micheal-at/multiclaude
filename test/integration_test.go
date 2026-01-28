@@ -8,13 +8,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dlorenc/multiclaude/internal/cli"
-	"github.com/dlorenc/multiclaude/internal/daemon"
-	"github.com/dlorenc/multiclaude/internal/socket"
-	"github.com/dlorenc/multiclaude/internal/state"
-	"github.com/dlorenc/multiclaude/internal/worktree"
-	"github.com/dlorenc/multiclaude/pkg/config"
-	"github.com/dlorenc/multiclaude/pkg/tmux"
+	"github.com/micheal-at/multiclaude/internal/cli"
+	"github.com/micheal-at/multiclaude/internal/daemon"
+	"github.com/micheal-at/multiclaude/internal/socket"
+	"github.com/micheal-at/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/internal/worktree"
+	"github.com/micheal-at/multiclaude/pkg/config"
+	"github.com/micheal-at/multiclaude/pkg/tmux"
 )
 
 // setupIntegrationTest creates a complete test environment with daemon, paths, and tmux.

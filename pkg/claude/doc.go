@@ -10,7 +10,7 @@
 //
 // # Installation
 //
-//	go get github.com/dlorenc/multiclaude/pkg/claude
+//	go get github.com/micheal-at/multiclaude/pkg/claude
 //
 // # Requirements
 //
@@ -24,8 +24,8 @@
 //
 //	import (
 //	    "log"
-//	    "github.com/dlorenc/multiclaude/pkg/claude"
-//	    "github.com/dlorenc/multiclaude/pkg/tmux"
+//	    "github.com/micheal-at/multiclaude/pkg/claude"
+//	    "github.com/micheal-at/multiclaude/pkg/tmux"
 //	)
 //
 //	func main() {

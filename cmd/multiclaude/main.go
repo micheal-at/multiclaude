@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dlorenc/multiclaude/internal/cli"
-	"github.com/dlorenc/multiclaude/internal/errors"
+	"github.com/micheal-at/multiclaude/internal/cli"
+	"github.com/micheal-at/multiclaude/internal/errors"
 )
 
 func main() {

@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dlorenc/multiclaude/internal/messages"
-	"github.com/dlorenc/multiclaude/internal/socket"
-	"github.com/dlorenc/multiclaude/internal/state"
-	"github.com/dlorenc/multiclaude/pkg/config"
+	"github.com/micheal-at/multiclaude/internal/messages"
+	"github.com/micheal-at/multiclaude/internal/socket"
+	"github.com/micheal-at/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/pkg/config"
 )
 
 // setupTestDaemonWithState creates a test daemon with a pre-configured state for testing.

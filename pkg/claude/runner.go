@@ -13,8 +13,8 @@
 //
 //	import (
 //	    "context"
-//	    "github.com/dlorenc/multiclaude/pkg/claude"
-//	    "github.com/dlorenc/multiclaude/pkg/tmux"
+//	    "github.com/micheal-at/multiclaude/pkg/claude"
+//	    "github.com/micheal-at/multiclaude/pkg/tmux"
 //	)
 //
 //	// Create a tmux client and claude runner

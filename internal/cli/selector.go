@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dlorenc/multiclaude/internal/format"
+	"github.com/micheal-at/multiclaude/internal/format"
 )
 
 // SelectableItem represents an item that can be selected from a list

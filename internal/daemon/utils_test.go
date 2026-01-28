@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dlorenc/multiclaude/internal/state"
+	"github.com/micheal-at/multiclaude/internal/state"
 )
 
 // Tests for getRequiredStringArg helper function
