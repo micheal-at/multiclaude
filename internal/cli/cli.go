@@ -16,7 +16,6 @@ import (
 	"github.com/micheal-at/multiclaude/internal/agents"
 	"github.com/micheal-at/multiclaude/internal/bugreport"
 	"github.com/micheal-at/multiclaude/internal/daemon"
-	"github.com/micheal-at/multiclaude/internal/dashboard"
 	"github.com/micheal-at/multiclaude/internal/errors"
 	"github.com/micheal-at/multiclaude/internal/fork"
 	"github.com/micheal-at/multiclaude/internal/format"
@@ -369,14 +368,6 @@ func (c *CLI) registerCommands() {
 		Description: "Stop daemon and kill all multiclaude tmux sessions",
 		Usage:       "multiclaude stop-all [--clean] [--yes]",
 		Run:         c.stopAll,
-	}
-
-	// Dashboard command
-	c.rootCmd.Subcommands["dashboard"] = &Command{
-		Name:        "dashboard",
-		Description: "Start web dashboard for monitoring multiclaude",
-		Usage:       "multiclaude dashboard [--port <port>] [--open]",
-		Run:         c.dashboard,
 	}
 
 	// Repository commands (repo subcommand)
@@ -834,36 +825,6 @@ func (c *CLI) daemonLogs(args []string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
-}
-
-func (c *CLI) dashboard(args []string) error {
-	flags, _ := ParseFlags(args)
-
-	// Default port 8080, configurable
-	port := "8080"
-	if p, ok := flags["port"]; ok {
-		port = p
-	}
-	if p, ok := flags["p"]; ok {
-		port = p
-	}
-
-	// Optional: open browser automatically
-	openBrowser := flags["open"] == "true"
-
-	// Create and start dashboard server
-	srv := dashboard.New(c.paths)
-
-	addr := fmt.Sprintf(":%s", port)
-	fmt.Printf("Dashboard available at http://localhost%s\n", addr)
-	fmt.Println("Press Ctrl+C to stop")
-
-	if openBrowser {
-		exec.Command("open", fmt.Sprintf("http://localhost%s", addr)).Start()
-	}
-
-	// Block until interrupted
-	return srv.ListenAndServe(addr)
 }
 
 func (c *CLI) stopAll(args []string) error {
