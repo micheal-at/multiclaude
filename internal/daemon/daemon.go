@@ -2168,6 +2168,23 @@ func (d *Daemon) restartAgent(repoName, agentName string, agent state.Agent, rep
 	}
 
 	d.logger.Info("Restarted agent %s with PID %d (resumed=%v)", agentName, result.PID, hasHistory)
+
+	// For workers without history, send the task as the initial message
+	// This handles cases where workers are restarted or spawned via mechanisms
+	// that don't use the CLI's startClaudeInTmux which normally sends the task
+	if agent.Type == state.AgentTypeWorker && agent.Task != "" && !hasHistory {
+		// Wait a moment for Claude to fully initialize
+		time.Sleep(1500 * time.Millisecond)
+
+		// Send the task to Claude
+		taskMessage := fmt.Sprintf("Task: %s", agent.Task)
+		if err := d.tmux.SendKeysLiteralWithEnter(d.ctx, repo.TmuxSession, agentName, taskMessage); err != nil {
+			d.logger.Warn("Failed to send task to restarted worker %s: %v", agentName, err)
+		} else {
+			d.logger.Info("Sent task to restarted worker %s", agentName)
+		}
+	}
+
 	return nil
 }
 
